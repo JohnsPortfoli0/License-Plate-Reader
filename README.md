@@ -14,7 +14,7 @@ Please download the "PlateReader.m" and "test_plate.jpg" under "Project Items".
 # Script Explanation and Flow
 1. Setup
   - Clears workspace (clc, clear all, close all).
-  - Loads an input image (stock_plate.jpg).
+  - Loads an input image (test_plate.jpg).
     
 2. Image Preprocessing
   - Displays the original image.
