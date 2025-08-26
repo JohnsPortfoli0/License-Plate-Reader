@@ -40,3 +40,22 @@ Please download the PlateReader.m file and open it in MATLAB.
   - Edge detection runtimes (Sobel vs. Canny).
   - Total OCR processing time.
 
+# Key Features
+- Edge Detection Benchmarking
+  - Compares Sobel vs Canny methods with runtime measurements.
+  - Visualizes edge maps side-by-side.
+- Manual ROI Selection
+  - Users crop the plate region (state/county text) and plate ID.
+  - Keeps focus on OCR performance instead of plate localization.
+- OCR with Character Set Restriction
+  - Region text limited to letters + periods.
+  - Plate ID includes letters + digits.
+  - Improves recognition accuracy by reducing false detections.
+- Confidence-Based Annotation
+  - High-confidence characters (≥60%) shown in green.
+  - Low-confidence characters (<60%) flagged in red.
+- Performance Summary
+  - Reports average OCR confidence, Sobel & Canny runtimes, and total OCR time.
+- Step-by-Step Visualization
+  - Multiple figures illustrate each stage: raw image → grayscale → edges → ROIs → final annotated plate.
+
