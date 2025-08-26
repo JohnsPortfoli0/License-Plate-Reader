@@ -6,7 +6,7 @@ Please download the "PlateReader.m" and "test_plate.jpg" under "Project Items".
 
 1. Open "PlateReader.m" in MATLAB.
 2. Ensure that "PlateReader.m" and "test_plate.jpg" are in the same folder within your MATLAB directory.
-3. Run the program and 5 figures will generate, proceed to next step.
+3. Run the program and five figures will initially generate, proceed to next step.
 4. On Figure 5, Draw a box tightly around “U.S. GOVERNMENT“ and double click your cursor.
 5. Next, Figure 6 will appear. Now, draw a box tightly around the plate number “A193958” and double click your cursor.
 6. Observe results in Figure 7.
