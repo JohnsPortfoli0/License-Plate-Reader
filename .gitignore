@@ -1,0 +1,28 @@
+# MATLAB autosave and backup files
+*.asv
+*.m~
+*.autosave
+
+# Compiled MEX binaries (platform-dependent extensions)
+*.mex*
+
+# Simulink code generation
+slprj/
+sccprj/
+*.slxc
+*.slx.autosave
+*.mdl.autosave
+
+# Figures and simulation outputs (optional)
+*.fig
+*.mat
+*.log
+
+# Reports
+*.pdf
+*.docx
+*.html
+
+# IDE / OS clutter
+.DS_Store
+Thumbs.db
