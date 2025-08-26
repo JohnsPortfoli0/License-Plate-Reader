@@ -58,4 +58,14 @@ Please download the PlateReader.m file and open it in MATLAB.
   - Reports average OCR confidence, Sobel & Canny runtimes, and total OCR time.
 - Step-by-Step Visualization
   - Multiple figures illustrate each stage: raw image → grayscale → edges → ROIs → final annotated plate.
+ 
+# Requirments
+- MATLAB R2024a (This is what I used)
+- Toolboxes
+  - Control System Toolbox (transfer functions, `step`, `feedback`)
+  - System Identification Toolbox (for `tfest`, `iddata`, `compare`) — only needed for identification scripts
+  - Symbolic Math Toolbox (for `tf('s)`)
+
+# License
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
