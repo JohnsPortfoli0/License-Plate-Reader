@@ -68,9 +68,8 @@ Please download the "PlateReader.m" and "test_plate.jpg" under "Project Items".
 # Requirments
 - MATLAB R2024a (This is what I used)
 - Toolboxes
-  - Control System Toolbox (transfer functions, `step`, `feedback`)
-  - System Identification Toolbox (for `tfest`, `iddata`, `compare`) — only needed for identification scripts
-  - Symbolic Math Toolbox (for `tf('s)`)
+  - Image Processing Toolbox (e.g., `edge`, `imfill`, `imcrop`, `imshowpair`, `montage`)
+  - Computer Vision Toolbox (e.g., `ocr`, `insertObjectAnnotation`)
 
 # License
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
