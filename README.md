@@ -12,57 +12,57 @@ Please download the "PlateReader.m" and "test_plate.jpg" under "Project Items".
 6. Observe results in Figure 7.
 
 # Script Explanation and Flow
-1. Setup
+**1. Setup**
   - Clears workspace (clc, clear all, close all).
   - Loads an input image (test_plate.jpg).
     
-2. Image Preprocessing
+**2. Image Preprocessing**
   - Displays the original image.
   - Converts to grayscale for faster and more reliable analysis.
 
-3. Edge Detection (Used for educational purposes)
+**3. Edge Detection (Used for educational purposes)**
   - Applies Sobel and Canny methods.
   - Measures runtime for each and displays results side-by-side.
   - Fills holes in edge maps for better visualization of character regions.
     
-4. User-Guided OCR
+**4. User-Guided OCR**
   - Step 1: Select plate region text (e.g., state, county, or agency).
   - Step 2: Select plate ID (letters and numbers).
 
   - OCR is restricted to relevant character sets (letters only for region, alphanumeric for ID). Outputs recognized text in the MATLAB console.
 
-5. Confidence Annotation
+**5. Confidence Annotation**
   - High-confidence characters (≥60%) are marked green.
   - Low-confidence characters (<60%) are marked red.
   - Final annotated plate is shown with bounding boxes and confidence labels.
 
-6. Summary Output
+**6. Summary Output**
   - Average OCR confidence across both ROIs.
   - Edge detection runtimes (Sobel vs. Canny).
   - Total OCR processing time.
 
 # Key Features
-- Edge Detection Benchmarking
+**Edge Detection Benchmarking**
   - Compares Sobel vs Canny methods with runtime measurements.
   - Visualizes edge maps side-by-side.
     
-- Manual ROI Selection
+**Manual ROI Selection**
   - Users crop the plate region (state/county text) and plate ID.
   - Keeps focus on OCR performance instead of plate localization.
     
-- OCR with Character Set Restriction
+**OCR with Character Set Restriction**
   - Region text limited to letters + periods.
   - Plate ID includes letters + digits.
   - Improves recognition accuracy by reducing false detections.
     
-- Confidence-Based Annotation
+**Confidence-Based Annotation**
   - High-confidence characters (≥60%) shown in green.
   - Low-confidence characters (<60%) flagged in red.
     
-- Performance Summary
+**Performance Summary**
   - Reports average OCR confidence, Sobel & Canny runtimes, and total OCR time.
     
-- Step-by-Step Visualization
+**Step-by-Step Visualization**
   - Multiple figures illustrate each stage: raw image → grayscale → edges → ROIs → final annotated plate.
  
 # Requirments
