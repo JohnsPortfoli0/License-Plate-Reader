@@ -61,13 +61,13 @@ figure(4)
 montage({sobel_filled, canny_filled}, 'Size', [1 2])
 title("Holes Filled - Sobel (Left) vs Canny (Right) Ideal")
 
-%% OCR Setup - License Plate Region (County, State, Department)
+%% OCR 1 Setup - License Plate Region (County, State, Department)
 fprintf('Draw a rectangle tightly around the plate''s region (letters):\n');
 figure(5)
 imshow(grayPlate)
 [~, ROI1] = imcrop(grayPlate); % allows user to select portion of image to read
 
-% OCR Function - Character and Punctuation Detection
+% OCR 1 Function - Character and Punctuation Detection
 tic; % begin stopwatch for OCR 1
 plateRegion = ocr(grayPlate, ROI1, CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ. ", LayoutAnalysis="block");
 ocr_time1 = toc; % end stopwatch for OCR 1
@@ -80,13 +80,13 @@ RegionRect = plateRegion.WordBoundingBoxes; % position of words
 
 fprintf(['\nLicense Plate Region: ', RegionText]) % display Region word
 
-%% OCR Setup - License Plate Identification Number
+%% OCR 2 Setup - License Plate Identification Number
 fprintf('Draw a rectangle tightly around the plate''s identification number:\n');
 figure(6)
 imshow(grayPlate)
 [~, ROI2] = imcrop(grayPlate); % allows user to select portion of image to read
 
-% OCR Function - Character and Number Detection
+% OCR 2 Function - Character and Number Detection
 tic; % begin stopwatch for OCR 2
 plateNumber = ocr(grayPlate, ROI2, CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789", LayoutAnalysis="block");
 ocr_time2 = toc; % end stopwatch for OCR 2
