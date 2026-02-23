@@ -19,6 +19,7 @@
 % * Date: 4/30/2025
 % * Course: ECEN 5830
 %
+% * Edited 2/23/2026
 
 clc
 clear all
@@ -151,3 +152,4 @@ fprintf('Average OCR Confidence: %.2f%%\n', avg_confidence);
 fprintf('Sobel Edge Detection Time: %.4f seconds\n', sobel_time);
 fprintf('Canny Edge Detection Time: %.4f seconds\n', canny_time);
 fprintf('Total OCR Time: %.4f seconds\n', total_ocr_time);
+
