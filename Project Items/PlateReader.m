@@ -25,7 +25,6 @@ clear all
 close all
 
 %% Image Reading and Display
-
 % loading-in images
 LicensePlate = imread("test_plate.jpg"); % license plate image
 
@@ -42,14 +41,14 @@ imshow(grayPlate)
 % focus on Sobel and Canny method as it is traditional in LPD.
 
 % sobel method - ideal image 
-tic;
+tic; % begin stopwatch
 edges_sobel = edge(grayPlate, "sobel");
-sobel_time = toc;
+sobel_time = toc; % end stopwatch
 
 % canny method - ideal image
-tic;
+tic; % begin stopwatch
 edges_canny = edge(grayPlate, "canny");
-canny_time = toc;
+canny_time = toc; % end stopwatch
 
 figure(3)
 imshowpair(edges_sobel, edges_canny, 'montage')
@@ -62,70 +61,82 @@ figure(4)
 montage({sobel_filled, canny_filled}, 'Size', [1 2])
 title("Holes Filled - Sobel (Left) vs Canny (Right) Ideal")
 
-%% OCR and Text Extraction
-
-% beginning with Identification of the plates origin (county, state,
-% department)
+%% OCR Setup - License Plate Region (County, State, Department)
 fprintf('Draw a rectangle tightly around the plate''s region (letters):\n');
 figure(5)
 imshow(grayPlate)
 [~, ROI1] = imcrop(grayPlate); % allows user to select portion of image to read
 
-focusedAreas = insertShape(grayPlate, "rectangle", ROI1, "color", "blue");
+% OCR Function - Character and Punctuation Detection
+tic; % begin stopwatch for OCR 1
+plateRegion = ocr(grayPlate, ROI1, CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ. ", LayoutAnalysis="block");
+ocr_time1 = toc; % end stopwatch for OCR 1
 
-tic;
-plateRegion = ocr(grayPlate, ROI1, ...
-    CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ. ", ...
-    LayoutAnalysis="block");
-ocr_time1 = toc;
+% OCR 1 Outputs
+RegionText = plateRegion.Text; % read word(s)
+RegionWords = plateRegion.Words; % word token(s) stored in cell
+RegionConfidence = plateRegion.WordConfidences; % confidence of read words
+RegionRect = plateRegion.WordBoundingBoxes; % position of words
 
-% Extract text
-region = plateRegion.Text;
-fprintf(['\nLicense Plate Region: ', region])
+fprintf(['\nLicense Plate Region: ', RegionText]) % display Region word
 
-% Detect low confidence characters and if any are less than 60%, highlight
-% in red
-low1 = (plateRegion.WordConfidences < 0.6);
-
-% Annotate low confidence characters in red
-% High Confidence - Green
-focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
-    plateRegion.WordBoundingBoxes(~low1, :), ...
-    strcat(plateRegion.Words(~low1), " (", string(round(plateRegion.WordConfidences(~low1)*100,1)), "%)"), "color", "green");
-
-% Low Confidence - Red
-focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
-    plateRegion.WordBoundingBoxes(low1, :), ...
-    strcat(plateRegion.Words(low1), " (", string(round(plateRegion.WordConfidences(low1)*100,1)), "%)"), "color", "red");
-
-% now extracting the actual license plate number
+%% OCR Setup - License Plate Identification Number
 fprintf('Draw a rectangle tightly around the plate''s identification number:\n');
 figure(6)
 imshow(grayPlate)
 [~, ROI2] = imcrop(grayPlate); % allows user to select portion of image to read
 
-% this portion will focus on characters and numbers
-tic;
-plateNumber = ocr(grayPlate, ROI2, CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789 ", LayoutAnalysis="block");
-ocr_time2 = toc;
-number = plateNumber.Text;
-fprintf(['\nLicense Plate ID: ', number])
+% OCR Function - Character and Number Detection
+tic; % begin stopwatch for OCR 2
+plateNumber = ocr(grayPlate, ROI2, CharacterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ.0123456789", LayoutAnalysis="block");
+ocr_time2 = toc; % end stopwatch for OCR 2
 
-% Detect low confidence characters and if any are less than 60%, highlight
-% in red
+% OCR 2 Outputs
+IDText = plateNumber.Text; % read ID(s)
+IDWords = plateNumber.Words; % word token(s) stored in cell
+IDConfidence = plateNumber.WordConfidences; % confidence of read ID
+IDRect = plateNumber.WordBoundingBoxes; % position of ID
+
+fprintf(['\nLicense Plate ID: ', IDText])
+
+%% Display Drawn ROIs on Image
+rects = [ROI1; ROI2];
+focusedAreas = insertShape(grayPlate, "rectangle", rects, ShapeColor=["red","blue"]);
+
+%% Text Extraction and Confidence Scoring - 'U.S. GOVERNMENT'
+
+% Detect low confidence words and if any are less than 60%, highlight in red
+low1 = (RegionConfidence < 0.6);
+
+% High Confidence - Green
+focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
+    RegionRect(~low1, :), ... % position of rectangle
+    strcat(RegionWords(~low1), " (", string(round(RegionConfidence(~low1)*100,1)), ... % concat. words and confidence percentage
+    "%)"), "color", "green");
+
+% Low Confidence - Red
+focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
+    RegionRect(low1, :), ... % position of rectangle
+    strcat(RegionWords(low1), " (", string(round(RegionConfidence(low1)*100,1)), ... % concat. words and confidence percentage
+    "%)"), "color", "red");
+
+%% Text Extraction and Confidence Scoring - 'A193958'
 low2 = (plateNumber.WordConfidences < 0.6);
 
 % Annotate low confidence characters in red
 % High Confidence - Green
-focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
-    plateNumber.WordBoundingBoxes(~low2, :), ...
-    strcat(plateNumber.Words(~low2), " (", string(round(plateNumber.WordConfidences(~low2)*100,1)), "%)"), "color", "green");
+focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ... 
+    IDRect(~low2, :), ... % position of rectangle
+    strcat(IDWords(~low2), " (", string(round(IDConfidence(~low2)*100,1)), ... % concat. words and confidence percentage
+    "%)"), "color", "green");
 
 % Low Confidence - Red
-focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ...
-    plateNumber.WordBoundingBoxes(low2, :), ...
-    strcat(plateNumber.Words(low2), " (", string(round(plateNumber.WordConfidences(low2)*100,1)), "%)"), "color", "red");
+focusedAreas = insertObjectAnnotation(focusedAreas, "rectangle", ... 
+    IDRect(low2, :), ... % position of rectangle
+    strcat(IDWords(low2), " (", string(round(IDConfidence(low2)*100,1)), ... % concat. words and confidence percentage
+    "%)"), "color", "red");
 
+%% OCR Results
 % Show result of the plate region
 figure(7)
 imshow(focusedAreas)
